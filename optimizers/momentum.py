@@ -9,9 +9,9 @@ class Momentum:
     def __init__(self, 
                  params:List[Dict[str, np.ndarray]],
                  lr=0.01,
-                 momentum: float = 0.9,
+                 beta: float = 0.9,
                  nesterov: bool = False,
-                 dampening:float = 0.0,
+                 eps:float = 0.0,
                  weight_decay: float = 0.0,
                  maximize: bool = False) -> None:
         """Initialize the Momentum SGD optimizer.
@@ -26,18 +26,18 @@ class Momentum:
             maximize: maximize instead of minimize (default: False)
 
         """
-        if not (0.0 <= momentum < 1.0):
+        if not (0.0 <= beta < 1.0):
             raise ValueError("Momentum must be in [0.0, 1.0).") # noqa: EM101, TRY003
-        if not (0.0 <= dampening < 1.0):
+        if not (0.0 <= eps < 1.0):
             raise ValueError("Dampening must be in [0.0, 1.0).") # noqa: EM101, TRY003
         if weight_decay < 0.0:
             raise ValueError("Weight decay must be non-negative.") # noqa: EM101, TRY003
 
         self.params = params
         self.lr = lr
-        self.momentum = momentum
+        self.beta = beta
         self.nesterov = nesterov
-        self.dampening = dampening
+        self.eps = eps
         self.weight_decay = weight_decay
         self.maximize = maximize
 
@@ -63,8 +63,8 @@ class Momentum:
                 v = np.zeros_like(parameter["value"])
 
             # Apply momentum
-            v = self.momentum * v + (1.0 - self.dampening) * gradient
-            g_eff = gradient + self.momentum * v if self.nesterov else v
+            v = self.beta * v + (1.0 - self.eps) * gradient
+            g_eff = gradient + self.beta * v if self.nesterov else v
 
             # Update parameter
             parameter["value"] -= sign * self.lr * g_eff
