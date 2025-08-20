@@ -4,7 +4,7 @@ import numpy as np
 
 class AdamW:
     def __init__(self, params, lr=1e-3, betas=(0.9, 0.999), eps=1e-8, weight_decay=1e-2):
-        if not (0.0 <= betas < 1.0):
+        if not (0.0 <= betas[0] < 1.0) or not (0.0 <= betas[1] < 1.0):
             raise ValueError("Momentum (betas) must be in [0.0, 1.0).") # noqa: EM101, TRY003
         if not (0.0 <= eps < 1.0):
             raise ValueError("Dampening (eps) must be in [0.0, 1.0).") # noqa: EM101, TRY003

@@ -3,7 +3,7 @@
 class SGD:
     """Stochastic Gradient Descent optimizer."""
 
-    def __init__(self, 
+    def __init__(self,
                  params, 
                  lr=0.01) -> None:# noqa: ANN001
         """Initialize the SGD optimizer.

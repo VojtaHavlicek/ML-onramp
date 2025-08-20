@@ -12,18 +12,16 @@ class Momentum:
                  beta: float = 0.9,
                  nesterov: bool = False,
                  eps:float = 0.0,
-                 weight_decay: float = 0.0,
-                 maximize: bool = False) -> None:
+                 weight_decay: float = 0.0) -> None:
         """Initialize the Momentum SGD optimizer.
 
         Args:
             params: list of dicts with {"value": np.ndarray, "grad": np.ndarray}
             lr: learning rate
-            momentum: momentum factor (0.0 <= momentum < 1.0)
+            beta: momentum factor (0.0 <= momentum < 1.0)
             nesterov: use Nesterov momentum (default: False)
-            dampening: dampening factor (0.0 <= dampening < 1.0)
+            eps: dampening factor (0.0 <= dampening < 1.0)
             weight_decay: L2 weight decay (default: 0.0)
-            maximize: maximize instead of minimize (default: False)
 
         """
         if not (0.0 <= beta < 1.0):
@@ -39,21 +37,19 @@ class Momentum:
         self.nesterov = nesterov
         self.eps = eps
         self.weight_decay = weight_decay
-        self.maximize = maximize
 
         # Per-parameter momentum buffers
         self._vel: List[Optional[np.ndarray]] = [None] * len(params)
 
     def step(self) -> None:
         """Update parameters in-place."""
-        sign = -1.0 if not self.maximize else 1.0
 
         for index, parameter in enumerate(self.params):
             gradient = parameter["grad"]
             if gradient is None:
                 continue
 
-            # L2 weight decay (coupled )
+            # L2 weight decay (coupled)
             if self.weight_decay > 0.0:
                 gradient += self.weight_decay * parameter["value"]
 
@@ -67,7 +63,7 @@ class Momentum:
             g_eff = gradient + self.beta * v if self.nesterov else v
 
             # Update parameter
-            parameter["value"] -= sign * self.lr * g_eff
+            parameter["value"] -= self.lr * g_eff
             self._vel[index] = v
 
 
