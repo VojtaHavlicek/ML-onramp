@@ -9,7 +9,7 @@ class Momentum:
     def __init__(self, 
                  params:List[Dict[str, np.ndarray]],
                  lr=0.01,
-                 beta: float = 0.9,
+                 beta: float = 0.0,
                  nesterov: bool = False,
                  eps:float = 0.0,
                  weight_decay: float = 0.0) -> None:
