@@ -1,9 +1,7 @@
-# mlp.py
-"""A simple 2-layer Multi-Layer Perceptron (MLP) class."""
-
 import numpy as np
-from utils import ReLU, softmax, cross_entropy
 from typing import List, Dict
+from utils import softmax, cross_entropy, ReLU
+
 
 class MLP:
     """A simple 2-layer Multi-Layer Perceptron (MLP) class."""

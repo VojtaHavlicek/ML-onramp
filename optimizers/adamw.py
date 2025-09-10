@@ -23,13 +23,13 @@ class AdamW:
 
     def step(self):
         self.t += 1
-        for i, p in enumerate(self.params):
-            g = p["grad"]
+        for i, param in enumerate(self.params):
+            g = param["grad"]
             if g is None: continue
 
             # moment estimates
             # 1. (Momentum) use exponential moving average for momentum
-            self.m[i] = self.beta1 * self.m[i] + (1-self.beta1) * g 
+            self.m[i] = self.beta1 * self.m[i] + (1-self.beta1) * g
 
             # 2. (RMSProp) use exponential moving average for squared gradients
             self.v[i] = self.beta2 * self.v[i] + (1-self.beta2) * (g*g)
@@ -39,7 +39,7 @@ class AdamW:
             v_hat = self.v[i] / (1 - self.beta2**self.t)
 
             # update: Adam step + decoupled weight decay
-            p["value"] -= self.lr * (m_hat / (np.sqrt(v_hat) + self.eps) + self.weight_decay * p["value"])
+            param["value"] -= self.lr * (m_hat / (np.sqrt(v_hat) + self.eps) + self.weight_decay * param["value"])
 
             # This means that the weight decay is applied directly to the parameters,
             # rather than to the gradients, which is the key difference from standard Adam.
